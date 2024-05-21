@@ -46,6 +46,21 @@ func (dll *DoublyLinkedList[T]) InsertLast(value T) {
 	dll.size++
 }
 
+func (dll *DoublyLinkedList[T]) InsertAt(index int, value T) error {
+	err := dll.checkIndex(index)
+	if err != nil {
+		return err
+	}
+
+	// 0 <-> 1 <-> 2 <-> 3 <-> 4
+	current := dll.traverseTo(index - 1)
+	new_node := &node[T]{value: value, prev: current, next: current.next}
+	current.next.prev = new_node
+	current.next = new_node
+
+	return nil
+}
+
 func (dll *DoublyLinkedList[T]) GetFirst() (T, error) {
 	if dll.IsEmpty() {
 		return *new(T), EmptyListError

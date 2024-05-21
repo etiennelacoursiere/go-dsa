@@ -14,7 +14,7 @@ func TestInsertFirst(t *testing.T) {
 		got  any
 	}{
 		{"head should be 1", 1, l.head.value},
-		{"head.next should be 2", 2, l.head.next.value},
+		{"head.next should be 2", 2, l.tail.value},
 		{"size should be 2", 2, l.size},
 	}
 
@@ -39,7 +39,34 @@ func TestInsertLast(t *testing.T) {
 		got  any
 	}{
 		{"head should be 1", 1, l.head.value},
+		{"head.next should be 2", 2, l.tail.value},
+		{"size should be 2", 2, l.size},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.got != tt.want {
+				t.Fatalf("Got %v, Expected: %v", tt.got, tt.want)
+			}
+		})
+	}
+}
+
+func TestInsertAt(t *testing.T) {
+	l := DoublyLinkedList[int]{}
+
+	l.InsertLast(1)
+	l.InsertLast(3)
+	l.InsertAt(1, 2)
+
+	var tests = []struct {
+		name string
+		want any
+		got  any
+	}{
+		{"head should be 1", 1, l.head.value},
 		{"head.next should be 2", 2, l.head.next.value},
+		{"tail should be 3", 3, l.tail.value},
 		{"size should be 2", 2, l.size},
 	}
 
@@ -66,7 +93,7 @@ func TestRemoveFirst(t *testing.T) {
 		got  any
 	}{
 		{"head should be 1", 1, l.head.value},
-		{"head.next should be 2", 2, l.head.next.value},
+		{"head.next should be 2", 2, l.tail.value},
 		{"size should be 2", 2, l.size},
 		{"removed should be 3", 3, removed},
 	}
@@ -94,7 +121,7 @@ func TestRemoveLast(t *testing.T) {
 		got  any
 	}{
 		{"head should be 1", 1, l.head.value},
-		{"head.next should be 2", 2, l.head.next.value},
+		{"head.next should be 2", 2, l.tail.value},
 		{"size should be 2", 2, l.size},
 		{"removed should be 3", 3, removed},
 	}
@@ -122,7 +149,7 @@ func TestRemoveAt(t *testing.T) {
 		got  any
 	}{
 		{"head should be 1", 1, l.head.value},
-		{"head.next should be 2", 2, l.head.next.value},
+		{"head.next should be 2", 2, l.tail.value},
 		{"size should be 2", 2, l.size},
 		{"removed should be 3", 3, removed},
 		{"err should be nil", nil, err},
