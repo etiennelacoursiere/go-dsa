@@ -7,23 +7,23 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
-type Node[T constraints.Ordered] struct {
+type node[T constraints.Ordered] struct {
 	value T
-	next  *Node[T]
+	next  *node[T]
 }
 
 type LinkedList[T constraints.Ordered] struct {
-	Head *Node[T]
-	Size int
+	head *node[T]
+	size int
 }
 
-func (l *LinkedList[T]) Append(value T) {
-	new_node := &Node[T]{value: value}
+func (l *LinkedList[T]) InsertLast(value T) {
+	new_node := &node[T]{value: value}
 
-	if l.Head == nil {
-		l.Head = new_node
+	if l.head == nil {
+		l.head = new_node
 	} else {
-		current := l.Head
+		current := l.head
 		for current.next != nil {
 			current = current.next
 		}
@@ -31,34 +31,12 @@ func (l *LinkedList[T]) Append(value T) {
 		current.next = new_node
 	}
 
-	l.Size++
+	l.size++
 }
 
-func (l *LinkedList[T]) Prepend(value T) {
-	new_node := &Node[T]{value: value}
-	new_node.next = l.Head
-	l.Head = new_node
-	l.Size++
-}
-
-func (l *LinkedList[T]) RemoveFirst() {
-	if l.IsEmpty() {
-		return
-	}
-
-	l.Head = l.Head.next
-	l.Size--
-}
-
-func (l *LinkedList[T]) RemoveLast() {
-	if l.IsEmpty() {
-		return
-	}
-
-	current := l.traverseTo(l.Size - 2) // traverse to the next to last
-	fmt.Println(l.Size, current)
-	current.next = nil
-	l.Size--
+func (l *LinkedList[T]) InsertFirst(value T) {
+	l.head = &node[T]{value: value, next: l.head}
+	l.size++
 }
 
 func (l *LinkedList[T]) InsertAt(index int, value T) error {
@@ -69,18 +47,37 @@ func (l *LinkedList[T]) InsertAt(index int, value T) error {
 	}
 
 	if index == 0 {
-		l.Prepend(value)
-	} else if index == l.Size {
-		l.Append(value)
+		l.InsertFirst(value)
+	} else if index == l.size {
+		l.InsertLast(value)
 	} else {
-		new_node := &Node[T]{value: value}
+		new_node := &node[T]{value: value}
 		current := l.traverseTo(index - 1)
 		new_node.next = current.next
 		current.next = new_node
-		l.Size++
+		l.size++
 	}
 
 	return nil
+}
+
+func (l *LinkedList[T]) RemoveFirst() {
+	if l.IsEmpty() {
+		return
+	}
+
+	l.head = l.head.next
+	l.size--
+}
+
+func (l *LinkedList[T]) RemoveLast() {
+	if l.IsEmpty() {
+		return
+	}
+
+	current := l.traverseTo(l.size - 2) // traverse to the next to last
+	current.next = nil
+	l.size--
 }
 
 func (l *LinkedList[T]) RemoveAt(index int) error {
@@ -95,16 +92,16 @@ func (l *LinkedList[T]) RemoveAt(index int) error {
 	} else {
 		current := l.traverseTo(index - 1)
 		current.next = current.next.next
-		l.Size--
+		l.size--
 	}
 
 	return nil
 }
 
-func (l *LinkedList[T]) traverseTo(index int) *Node[T] {
-	current := l.Head
+func (l *LinkedList[T]) traverseTo(index int) *node[T] {
+	current := l.head
 
-	for i := 0; i < index; i++ {
+	for i := 0; i != index; i++ {
 		current = current.next
 	}
 
@@ -112,7 +109,7 @@ func (l *LinkedList[T]) traverseTo(index int) *Node[T] {
 }
 
 func (l *LinkedList[T]) checkIndex(index int) error {
-	if index < 0 || index > l.Size {
+	if index < 0 || index > l.size {
 		return errors.New("Index out of range")
 	}
 
@@ -120,11 +117,11 @@ func (l *LinkedList[T]) checkIndex(index int) error {
 }
 
 func (l *LinkedList[T]) IsEmpty() bool {
-	return l.Size == 0
+	return l.size == 0
 }
 
 func (l *LinkedList[T]) Print() {
-	current := l.Head
+	current := l.head
 
 	if current == nil {
 		fmt.Println("Linked list is empty")
