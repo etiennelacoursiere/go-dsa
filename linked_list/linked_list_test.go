@@ -3,7 +3,7 @@ package linked_list
 import "testing"
 
 func TestAppend(t *testing.T) {
-	l := LinkedList{}
+	l := LinkedList[int]{}
 
 	l.Append(7)
 	l.Append(11)
@@ -29,7 +29,7 @@ func TestAppend(t *testing.T) {
 }
 
 func TestPrepend(t *testing.T) {
-	l := LinkedList{}
+	l := LinkedList[int]{}
 
 	l.Append(2)
 	l.Append(3)
@@ -47,7 +47,7 @@ func TestPrepend(t *testing.T) {
 }
 
 func TestRemoveFirst(t *testing.T) {
-	l := LinkedList{}
+	l := LinkedList[int]{}
 
 	l.Append(0)
 	l.Append(1)
@@ -66,11 +66,11 @@ func TestRemoveFirst(t *testing.T) {
 }
 
 func TestRemoveLast(t *testing.T) {
-	l := LinkedList{}
+	l := LinkedList[string]{}
 
-	l.Append(1)
-	l.Append(2)
-	l.Append(3)
+	l.Append("1")
+	l.Append("2")
+	l.Append("3")
 	l.RemoveLast()
 
 	l.Print()
@@ -86,7 +86,7 @@ func TestRemoveLast(t *testing.T) {
 }
 
 func TestInsertAt(t *testing.T) {
-	l := LinkedList{}
+	l := LinkedList[int]{}
 
 	l.Append(1)
 	l.Append(2)
@@ -105,7 +105,7 @@ func TestInsertAt(t *testing.T) {
 }
 
 func TestRemoveAt(t *testing.T) {
-	l := LinkedList{}
+	l := LinkedList[int]{}
 
 	l.Append(1)
 	l.Append(2)
