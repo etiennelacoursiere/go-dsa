@@ -116,19 +116,18 @@ func (pq *PriorityQueue[T]) removeAt(index int) (T, error) {
 }
 
 func (pq *PriorityQueue[T]) swim(index int) {
-	parentIndex := (index - 1) / 2
+	parentIndex := pq.getParent(index)
 
 	for index > 0 && pq.less(index, parentIndex) {
 		pq.swap(parentIndex, index)
 		index = parentIndex
-		parentIndex = (index - 1) / 2
+		parentIndex = pq.getParent(index)
 	}
 }
 
 func (pq *PriorityQueue[T]) sink(index int) {
 	for true {
-		left := 2*index + 1
-		right := 2*index + 2
+		left, right := pq.getChildren(index)
 		smallest := left
 
 		if right < pq.Size() && pq.less(right, left) {
@@ -159,14 +158,24 @@ func (pq *PriorityQueue[T]) less(index1, index2 int) bool {
 	return value1 <= value2
 }
 
+func (pq *PriorityQueue[T]) getParent(index int) int {
+	return (index - 1) / 2
+}
+
+func (pq *PriorityQueue[T]) getChildren(index int) (int, int) {
+	left := 2*index + 1
+	right := 2*index + 2
+
+	return left, right
+}
+
 // This method is just for testing.
 func (pq *PriorityQueue[T]) isMinHeap(index int) bool {
 	if index >= pq.Size() {
 		return true
 	}
 
-	left := 2*index + 1
-	right := 2*index + 2
+	left, right := pq.getChildren(index)
 
 	if left < pq.Size() && !pq.less(index, left) {
 		return false
