@@ -158,3 +158,23 @@ func (pq *PriorityQueue[T]) less(index1, index2 int) bool {
 
 	return value1 <= value2
 }
+
+// This method is just for testing.
+func (pq *PriorityQueue[T]) isMinHeap(index int) bool {
+	if index >= pq.Size() {
+		return true
+	}
+
+	left := 2*index + 1
+	right := 2*index + 2
+
+	if left < pq.Size() && !pq.less(index, left) {
+		return false
+	}
+
+	if right < pq.Size() && !pq.less(index, right) {
+		return false
+	}
+
+	return pq.isMinHeap(left) && pq.isMinHeap(right)
+}

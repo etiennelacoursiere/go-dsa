@@ -11,6 +11,7 @@ func TestFill(t *testing.T) {
 	pq.Fill(values)
 	assert(t, pq.Size(), 5)
 	assert(t, pq.heap[0], 1)
+	assert(t, pq.isMinHeap(0), true)
 }
 
 func TestAdd(t *testing.T) {
@@ -24,6 +25,7 @@ func TestAdd(t *testing.T) {
 
 	pq.Add(0)
 	assert(t, 0, pq.heap[0])
+	assert(t, pq.isMinHeap(0), true)
 }
 
 func TestPeek(t *testing.T) {
@@ -35,6 +37,7 @@ func TestPeek(t *testing.T) {
 	assert(t, peekedValue, 50)
 	assert(t, pq.Size(), 2)
 	assert(t, err, nil)
+	assert(t, pq.isMinHeap(0), true)
 
 	pq.Clear()
 	_, err = pq.Peek()
@@ -58,6 +61,7 @@ func TestRemove(t *testing.T) {
 
 	_, err = pq.Remove(4)
 	assert(t, err, notFoundError)
+	assert(t, pq.isMinHeap(0), true)
 
 	pq.Clear()
 	_, err = pq.Remove(0)
@@ -75,6 +79,7 @@ func TestPoll(t *testing.T) {
 	}
 
 	assert(t, polledValues, []int{1, 4, 5})
+	assert(t, pq.isMinHeap(0), true)
 
 	pq.Clear()
 	_, err := pq.Poll()
