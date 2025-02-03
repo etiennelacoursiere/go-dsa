@@ -32,11 +32,11 @@ func (v *Vector2) Div(other Vector2) *Vector2 {
 }
 
 func (v *Vector2) Length() float64 {
-	return math.Sqrt(math.Pow(v.x, 2) + math.Pow(v.y, 2))
+	return math.Sqrt(v.x*v.x + v.y*v.y)
 }
 
-func (v *Vector2) Magnitude() float64 {
-	return v.Length()
+func (v *Vector2) SqrLength() float64 {
+	return v.x*v.x + v.y + v.y
 }
 
 func (v *Vector2) Normalize() *Vector2 {
